@@ -7,6 +7,10 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class ShoppingCart {
+    private static final Map<String, Integer> PROMO_CODES =
+            Map.of("SALE10", 10, "SALE20", 20, "HALF", 50, "HOT", 90);
+    private int discountPercent = 0;
+
     private final Map<String, Product> catalog = new HashMap<>();
     private final Map<String, Integer> items = new LinkedHashMap<>();
 
@@ -56,11 +60,23 @@ public class ShoppingCart {
         }
     }
 
+    public void applyPromoCode(String code) {
+        Integer percent = code == null ? null : PROMO_CODES.get(code.trim().toUpperCase());
+        if (percent == null) {
+            throw new CartException("Недействительный промокод: " + code);
+        }
+        discountPercent = percent;
+    }
+
+    public int getDiscountPercent() {
+        return discountPercent;
+    }
+
     public double getTotal() {
         double sum = 0;
         for (Map.Entry<String, Integer> e : items.entrySet()) {
             sum += catalog.get(e.getKey()).getPrice() * e.getValue();
         }
-        return Math.round(sum * 100.0) / 100.0;
+        return Math.round(sum * (100 - discountPercent) / 100.0 * 100.0) / 100.0;
     }
 }
