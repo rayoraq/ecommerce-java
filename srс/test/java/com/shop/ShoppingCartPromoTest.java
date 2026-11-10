@@ -3,6 +3,7 @@ package com.shop;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.List;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -27,15 +28,18 @@ class ShoppingCartPromoTest {
 
     @ParameterizedTest(name = "Промокод {0} дает скидку {1}% и сумму {2}")
     @CsvSource(
-            ignoreLeadingAndTrailingWhitespace = false,
-            value = {
-                    "SALE10, 10, 900.0",
-                    "'  sale20 ', 20, 800.0",
-                    "HALF, 50, 500.0",
-                    "HOT, 90, 100.0"
-            }
+        ignoreLeadingAndTrailingWhitespace = false,
+        value = {
+            "SALE10, 10, 900.0",
+            "'  sale20 ', 20, 800.0",
+            "HALF, 50, 500.0",
+            "HOT, 90, 100.0"
+        }
     )
-    void givenValidPromo_whenApplyPromo_thenAppliesCorrectDiscount(String code, int expectedDiscount, double expectedTotal) {
+    void givenValidPromo_whenApplyPromo_thenAppliesCorrectDiscount(
+        String code,
+        int expectedDiscount,
+        double expectedTotal) {
         cart.applyPromoCode(code);
         assertEquals(expectedDiscount, cart.getDiscountPercent());
         assertEquals(expectedTotal, cart.getTotal(), 0.001);

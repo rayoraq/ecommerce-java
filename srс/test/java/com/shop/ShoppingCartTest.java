@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.List;
 import java.util.Map;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -15,8 +16,8 @@ class ShoppingCartTest {
     @BeforeEach
     void setUp() {
         cart = new ShoppingCart(List.of(
-                new Product("prod_1", "Смартфон", 500.0, 5),
-                new Product("prod_2", "Чехол", 10.5, 100)));
+            new Product("prod_1", "Смартфон", 500.0, 5),
+            new Product("prod_2", "Чехол", 10.5, 100)));
     }
 
     @Test
