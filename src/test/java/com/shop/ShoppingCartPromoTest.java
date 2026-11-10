@@ -28,7 +28,6 @@ class ShoppingCartPromoTest {
 
     @ParameterizedTest(name = "Промокод {0} дает скидку {1}% и сумму {2}")
     @CsvSource(
-        ignoreLeadingAndTrailingWhitespace = false,
         value = {
             "SALE10, 10, 900.0",
             "'  sale20 ', 20, 800.0",
