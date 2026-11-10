@@ -8,7 +8,7 @@ import java.util.Map;
 
 public class ShoppingCart {
     private static final Map<String, Integer> PROMO_CODES =
-            Map.of("SALE10", 10, "SALE20", 20, "HALF", 50, "HOT", 90);
+        Map.of("SALE10", 10, "SALE20", 20, "HALF", 50, "HOT", 90);
     private int discountPercent = 0;
 
     private final Map<String, Product> catalog = new HashMap<>();
