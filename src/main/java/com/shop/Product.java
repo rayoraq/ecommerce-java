@@ -1,16 +1,18 @@
 package com.shop;
 
-public record Product(
-    String id,
-    String name,
-    double price,
-    int stock){
+import lombok.NonNull;
 
-    public Product{
-        if (id == null || id.isBlank()) {
+public record Product(
+    @NonNull String id,
+    @NonNull String name,
+    double price,
+    int stock) {
+
+    public Product {
+        if (id.isBlank()) {
             throw new IllegalArgumentException("id должен быть непустым");
         }
-        if (name == null || name.isBlank()) {
+        if (name.isBlank()) {
             throw new IllegalArgumentException("name должен быть непустым");
         }
         if (price < 0) {
