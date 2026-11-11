@@ -1,82 +1,86 @@
 package com.shop;
 
+import lombok.Getter;
+import lombok.experimental.FieldDefaults;
+import lombok.experimental.NonFinal;
+import lombok.val;
+
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Optional;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
+@FieldDefaults(makeFinal = true)
 public class ShoppingCart {
-    private static final Map<String, Integer> PROMO_CODES =
-        Map.of("SALE10", 10, "SALE20", 20, "HALF", 50, "HOT", 90);
-    private int discountPercent = 0;
+    Map<String, Product> catalog;
+    Map<String, Integer> items = new LinkedHashMap<>();
 
-    private final Map<String, Product> catalog = new HashMap<>();
-    private final Map<String, Integer> items = new LinkedHashMap<>();
+    @Getter
+    @NonFinal
+    int discountPercent;
 
     public ShoppingCart(Collection<Product> products) {
-        for (Product p : products) {
-            catalog.put(p.getId(), p);
-        }
+        catalog = products.stream()
+            .collect(Collectors.toMap(Product::id, Function.identity()));
     }
 
     public Map<String, Integer> getItems() {
         return Collections.unmodifiableMap(items);
     }
 
-    public void addItem(String productId, int quantity) {
-        if (quantity <= 0) {
-            throw new CartException("Количество должно быть больше 0");
-        }
-        Product product = catalog.get(productId);
-        if (product == null) {
-            throw new CartException("Товар не найден: " + productId);
-        }
-        int newQuantity = items.getOrDefault(productId, 0) + quantity;
-        if (newQuantity > product.getStock()) {
-            throw new CartException("На складе только " + product.getStock() + " шт.");
+    public boolean addItem(String productId, int quantity) {
+        requirePositive(quantity);
+        val newQuantity = items.getOrDefault(productId, 0) + quantity;
+        if (newQuantity > findProduct(productId).stock()) {
+            return false;
         }
         items.put(productId, newQuantity);
+        return true;
     }
 
-    public void removeItem(String productId) {
-        if (items.remove(productId) == null) {
-            throw new CartException("Товара нет в корзине: " + productId);
-        }
+    public boolean removeItem(String productId) {
+        return items.remove(productId) != null;
     }
 
-    public void removeItem(String productId, int quantity) {
-        if (quantity <= 0) {
-            throw new CartException("Количество должно быть больше 0");
-        }
-        Integer current = items.get(productId);
+    public boolean removeItem(String productId, int quantity) {
+        requirePositive(quantity);
+        val current = items.get(productId);
         if (current == null) {
-            throw new CartException("Товара нет в корзине: " + productId);
+            return false;
         }
         if (quantity >= current) {
             items.remove(productId);
         } else {
             items.put(productId, current - quantity);
         }
+        return true;
     }
 
-    public void applyPromoCode(String code) {
-        Integer percent = code == null ? null : PROMO_CODES.get(code.trim().toUpperCase());
-        if (percent == null) {
-            throw new CartException("Недействительный промокод: " + code);
-        }
-        discountPercent = percent;
-    }
-
-    public int getDiscountPercent() {
-        return discountPercent;
+    public boolean applyPromoCode(String text) {
+        val promoCode = PromoCode.findByText(text);
+        promoCode.ifPresent(code -> discountPercent = code.getDiscountPercent());
+        return promoCode.isPresent();
     }
 
     public double getTotal() {
-        double sum = 0;
-        for (Map.Entry<String, Integer> e : items.entrySet()) {
-            sum += catalog.get(e.getKey()).getPrice() * e.getValue();
+        val sum = items.entrySet()
+            .stream()
+            .mapToDouble(entry -> catalog.get(entry.getKey()).price() * entry.getValue())
+            .sum();
+        return Math.round(sum * (100 - discountPercent)) / 100.0;
+    }
+
+    private static void requirePositive(int quantity) {
+        if (quantity <= 0) {
+            throw new IllegalArgumentException("Количество должно быть больше 0: " + quantity);
         }
-        return Math.round(sum * (100 - discountPercent) / 100.0 * 100.0) / 100.0;
+    }
+
+    private Product findProduct(String productId) {
+        return Optional.ofNullable(catalog.get(productId))
+            .orElseThrow(() -> new IllegalArgumentException("Тован не найден: " + productId));
     }
 }
