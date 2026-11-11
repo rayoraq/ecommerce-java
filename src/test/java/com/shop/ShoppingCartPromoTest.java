@@ -1,15 +1,17 @@
 package com.shop;
 
-import static org.junit.jupiter.api.Assertions.*;
-
-import java.util.List;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.NullAndEmptySource;
 import org.junit.jupiter.params.provider.ValueSource;
+
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class ShoppingCartPromoTest {
     private ShoppingCart cart;
@@ -39,23 +41,33 @@ class ShoppingCartPromoTest {
         String code,
         int expectedDiscount,
         double expectedTotal) {
-        cart.applyPromoCode(code);
+        assertTrue(cart.applyPromoCode(code));
         assertEquals(expectedDiscount, cart.getDiscountPercent());
         assertEquals(expectedTotal, cart.getTotal(), 0.001);
     }
 
     @Test
     void givenPromoApplied_whenNewPromoApplied_thenOldPromoIsReplaced() {
-        cart.applyPromoCode("SALE10");
-        cart.applyPromoCode("SALE20");
+        assertTrue(cart.applyPromoCode("SALE10"));
+        assertTrue(cart.applyPromoCode("SALE20"));
         assertEquals(20, cart.getDiscountPercent());
+        assertEquals(800.0, cart.getTotal(), 0.001);
     }
 
     @ParameterizedTest(name = "Невалидный промокод: [{0}]")
     @NullAndEmptySource
     @ValueSource(strings = {"WRONG", "SALE99", "HOT100"})
     void givenInvalidPromo_whenApplyPromo_thenThrowsExceptionAndDiscountRemainsZero(String badCode) {
-        assertThrows(CartException.class, () -> cart.applyPromoCode(badCode));
+        assertFalse(cart.applyPromoCode(badCode));
         assertEquals(0, cart.getDiscountPercent());
+        assertEquals(1000.0, cart.getTotal(), 0.001);
+    }
+
+    @Test
+    void givenPromoApplied_whenInvalidPromoApplied_thenReturnsFalseAndOldPromoRemains() {
+        assertTrue(cart.applyPromoCode("SALE20"));
+        assertFalse(cart.applyPromoCode("WRONG"));
+        assertEquals(20, cart.getDiscountPercent());
+        assertEquals(800.0, cart.getTotal(), 0.001);
     }
 }
