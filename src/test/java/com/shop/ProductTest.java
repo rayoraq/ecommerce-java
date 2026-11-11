@@ -1,32 +1,43 @@
 package com.shop;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.NullAndEmptySource;
+import org.junit.jupiter.params.provider.EmptySource;
 import org.junit.jupiter.params.provider.ValueSource;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class ProductTest {
 
     @Test
     void givenValidData_whenCreateProduct_thenAttributesAreSet() {
         Product p = new Product("prod_102", "Смартфон", 999.99, 3);
-        assertEquals("prod_102", p.getId());
-        assertEquals("Смартфон", p.getName());
-        assertEquals(999.99, p.getPrice(), 0.001);
-        assertEquals(3, p.getStock());
+        assertEquals("prod_102", p.id());
+        assertEquals("Смартфон", p.name());
+        assertEquals(999.99, p.price(), 0.001);
+        assertEquals(3, p.stock());
+    }
+
+    @Test
+    void givenNullId_whenCreateProduct_thenThrowsNullPointerException() {
+        assertThrows(NullPointerException.class, () -> new Product(null, "N", 1, 1));
     }
 
     @ParameterizedTest
-    @NullAndEmptySource
+    @EmptySource
     @ValueSource(strings = {"   ", "\t", "\n"})
     void givenInvalidId_whenCreateProduct_thenThrowsIllegalArgumentException(String badId) {
         assertThrows(IllegalArgumentException.class, () -> new Product(badId, "N", 1, 1));
     }
 
+    @Test
+    void givenNullName_whenCreateProduct_thenThrowsNullPointerException() {
+        assertThrows(NullPointerException.class, () -> new Product("p", null, 1, 1));
+    }
+
     @ParameterizedTest
-    @NullAndEmptySource
+    @EmptySource
     @ValueSource(strings = {"   ", "\t", "\n"})
     void givenInvalidName_whenCreateProduct_thenThrowsIllegalArgumentException(String badName) {
         assertThrows(IllegalArgumentException.class, () -> new Product("p", badName, 1, 1));
