@@ -81,6 +81,6 @@ public class ShoppingCart {
 
     private Product findProduct(String productId) {
         return Optional.ofNullable(catalog.get(productId))
-            .orElseThrow(() -> new IllegalArgumentException("Тован не найден: " + productId));
+            .orElseThrow(() -> new IllegalArgumentException("Товар не найден: " + productId));
     }
 }
