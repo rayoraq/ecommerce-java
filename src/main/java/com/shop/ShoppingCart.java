@@ -9,9 +9,10 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.Optional;
-import java.util.function.Function;
 import java.util.stream.Collectors;
+
+import static java.util.Optional.ofNullable;
+import static java.util.function.Function.identity;
 
 @FieldDefaults(makeFinal = true)
 public class ShoppingCart {
@@ -22,16 +23,16 @@ public class ShoppingCart {
     @NonFinal
     int discountPercent;
 
-    public ShoppingCart(Collection<Product> products) {
+    public ShoppingCart(final Collection<Product> products) {
         catalog = products.stream()
-            .collect(Collectors.toMap(Product::id, Function.identity()));
+            .collect(Collectors.toMap(Product::id, identity()));
     }
 
     public Map<String, Integer> getItems() {
         return Collections.unmodifiableMap(items);
     }
 
-    public boolean addItem(String productId, int quantity) {
+    public boolean addItem(final String productId, final int quantity) {
         requirePositive(quantity);
         val newQuantity = items.getOrDefault(productId, 0) + quantity;
         if (newQuantity > findProduct(productId).stock()) {
@@ -41,11 +42,11 @@ public class ShoppingCart {
         return true;
     }
 
-    public boolean removeItem(String productId) {
+    public boolean removeItem(final String productId) {
         return items.remove(productId) != null;
     }
 
-    public boolean removeItem(String productId, int quantity) {
+    public boolean removeItem(final String productId, final int quantity) {
         requirePositive(quantity);
         val current = items.get(productId);
         if (current == null) {
@@ -59,7 +60,7 @@ public class ShoppingCart {
         return true;
     }
 
-    public boolean applyPromoCode(String text) {
+    public boolean applyPromoCode(final String text) {
         val promoCode = PromoCode.findByText(text);
         promoCode.ifPresent(code -> discountPercent = code.getDiscountPercent());
         return promoCode.isPresent();
@@ -73,14 +74,14 @@ public class ShoppingCart {
         return Math.round(sum * (100 - discountPercent)) / 100.0;
     }
 
-    private static void requirePositive(int quantity) {
+    private static void requirePositive(final int quantity) {
         if (quantity <= 0) {
             throw new IllegalArgumentException("Количество должно быть больше 0: " + quantity);
         }
     }
 
-    private Product findProduct(String productId) {
-        return Optional.ofNullable(catalog.get(productId))
+    private Product findProduct(final String productId) {
+        return ofNullable(catalog.get(productId))
             .orElseThrow(() -> new IllegalArgumentException("Товар не найден: " + productId));
     }
 }

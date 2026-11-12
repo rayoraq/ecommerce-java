@@ -18,7 +18,7 @@ public enum PromoCode {
 
     int discountPercent;
 
-    public static Optional<PromoCode> findByText(String text) {
+    public static Optional<PromoCode> findByText(final String text) {
         return Optional.ofNullable(text)
             .map(String::trim)
             .map(String::toUpperCase)
