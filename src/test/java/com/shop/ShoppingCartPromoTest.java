@@ -9,9 +9,8 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.AssertionsForClassTypes.within;
 
 class ShoppingCartPromoTest {
     private ShoppingCart cart;
@@ -24,8 +23,8 @@ class ShoppingCartPromoTest {
 
     @Test
     void givenNoPromoByDefault_whenCheckDiscount_thenReturnsZeroAndOriginalTotal() {
-        assertEquals(0, cart.getDiscountPercent());
-        assertEquals(1000.0, cart.getTotal(), 0.001);
+        assertThat(cart.getDiscountPercent()).isZero();
+        assertThat(cart.getTotal()).isCloseTo(1000.0, within(0.001));
     }
 
     @ParameterizedTest(name = "Промокод {0} дает скидку {1}% и сумму {2}")
@@ -41,33 +40,33 @@ class ShoppingCartPromoTest {
         String code,
         int expectedDiscount,
         double expectedTotal) {
-        assertTrue(cart.applyPromoCode(code));
-        assertEquals(expectedDiscount, cart.getDiscountPercent());
-        assertEquals(expectedTotal, cart.getTotal(), 0.001);
+        assertThat(cart.applyPromoCode(code)).isTrue();
+        assertThat(cart.getDiscountPercent()).isEqualTo(expectedDiscount);
+        assertThat(cart.getTotal()).isCloseTo(expectedTotal, within(0.001));
     }
 
     @Test
     void givenPromoApplied_whenNewPromoApplied_thenOldPromoIsReplaced() {
-        assertTrue(cart.applyPromoCode("SALE10"));
-        assertTrue(cart.applyPromoCode("SALE20"));
-        assertEquals(20, cart.getDiscountPercent());
-        assertEquals(800.0, cart.getTotal(), 0.001);
+        assertThat(cart.applyPromoCode("SALE10")).isTrue();
+        assertThat(cart.applyPromoCode("SALE20")).isTrue();
+        assertThat(cart.getDiscountPercent()).isEqualTo(20);
+        assertThat(cart.getTotal()).isCloseTo(800.0, within(0.001));
     }
 
     @ParameterizedTest(name = "Невалидный промокод: [{0}]")
     @NullAndEmptySource
     @ValueSource(strings = {"WRONG", "SALE99", "HOT100"})
     void givenInvalidPromo_whenApplyPromo_thenThrowsExceptionAndDiscountRemainsZero(String badCode) {
-        assertFalse(cart.applyPromoCode(badCode));
-        assertEquals(0, cart.getDiscountPercent());
-        assertEquals(1000.0, cart.getTotal(), 0.001);
+        assertThat(cart.applyPromoCode(badCode)).isFalse();
+        assertThat(cart.getDiscountPercent()).isZero();
+        assertThat(cart.getTotal()).isCloseTo(1000.0, within(0.001));
     }
 
     @Test
     void givenPromoApplied_whenInvalidPromoApplied_thenReturnsFalseAndOldPromoRemains() {
-        assertTrue(cart.applyPromoCode("SALE20"));
-        assertFalse(cart.applyPromoCode("WRONG"));
-        assertEquals(20, cart.getDiscountPercent());
-        assertEquals(800.0, cart.getTotal(), 0.001);
+        assertThat(cart.applyPromoCode("SALE20")).isTrue();
+        assertThat(cart.applyPromoCode("WRONG")).isFalse();
+        assertThat(cart.getDiscountPercent()).isEqualTo(20);
+        assertThat(cart.getTotal()).isCloseTo(800.0, within(0.001));
     }
 }
