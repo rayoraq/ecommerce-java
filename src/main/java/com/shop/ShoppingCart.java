@@ -9,9 +9,10 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.Optional;
-import java.util.function.Function;
 import java.util.stream.Collectors;
+
+import static java.util.Optional.ofNullable;
+import static java.util.function.Function.identity;
 
 @FieldDefaults(makeFinal = true)
 public class ShoppingCart {
@@ -24,7 +25,7 @@ public class ShoppingCart {
 
     public ShoppingCart(final Collection<Product> products) {
         catalog = products.stream()
-            .collect(Collectors.toMap(Product::id, Function.identity()));
+            .collect(Collectors.toMap(Product::id, identity()));
     }
 
     public Map<String, Integer> getItems() {
@@ -80,7 +81,7 @@ public class ShoppingCart {
     }
 
     private Product findProduct(final String productId) {
-        return Optional.ofNullable(catalog.get(productId))
+        return ofNullable(catalog.get(productId))
             .orElseThrow(() -> new IllegalArgumentException("Товар не найден: " + productId));
     }
 }
