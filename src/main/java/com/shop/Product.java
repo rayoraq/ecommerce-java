@@ -2,11 +2,7 @@ package com.shop;
 
 import lombok.NonNull;
 
-public record Product(
-    @NonNull String id,
-    @NonNull String name,
-    double price,
-    int stock) {
+public record Product(@NonNull String id, @NonNull String name, double price, int stock) {
 
     public Product {
         if (id.isBlank()) {
