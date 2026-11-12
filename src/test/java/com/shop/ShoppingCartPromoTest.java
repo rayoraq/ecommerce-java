@@ -56,7 +56,7 @@ class ShoppingCartPromoTest {
     @ParameterizedTest(name = "Невалидный промокод: [{0}]")
     @NullAndEmptySource
     @ValueSource(strings = {"WRONG", "SALE99", "HOT100"})
-    void givenInvalidPromo_whenApplyPromo_thenThrowsExceptionAndDiscountRemainsZero(String badCode) {
+    void givenInvalidPromo_whenApplyPromo_thenThrowsExceptionAndDiscountRemainsZero(final String badCode) {
         assertThat(cart.applyPromoCode(badCode)).isFalse();
         assertThat(cart.getDiscountPercent()).isZero();
         assertThat(cart.getTotal()).isCloseTo(1000.0, within(0.001));

@@ -44,7 +44,7 @@ class ShoppingCartTest {
 
     @ParameterizedTest
     @ValueSource(ints = {0, -1, -3, -100})
-    void givenInvalidQuantity_whenAddItem_thenThrowsException(int badQuantity) {
+    void givenInvalidQuantity_whenAddItem_thenThrowsException(final int badQuantity) {
         assertThatIllegalArgumentException()
             .isThrownBy(() -> cart.addItem("prod_1", badQuantity));
     }
@@ -57,7 +57,7 @@ class ShoppingCartTest {
 
     @ParameterizedTest
     @ValueSource(ints = {6, 10, 100})
-    void givenQuantityExceedingStock_whenAddItem_thenReturnsFalse(int quantity) {
+    void givenQuantityExceedingStock_whenAddItem_thenReturnsFalse(final int quantity) {
         assertThat(cart.addItem("prod_1", quantity)).isFalse();
         assertThat(cart.getItems()).isEmpty();
     }
@@ -100,7 +100,7 @@ class ShoppingCartTest {
 
     @ParameterizedTest
     @ValueSource(ints = {0, -1, -100})
-    void givenItemInCart_whenRemoveInvalidQuantity_thenThrowsException(int badQuantity) {
+    void givenItemInCart_whenRemoveInvalidQuantity_thenThrowsException(final int badQuantity) {
         cart.addItem("prod_1", 3);
         assertThatIllegalArgumentException()
             .isThrownBy(() -> cart.removeItem("prod_1", badQuantity));
