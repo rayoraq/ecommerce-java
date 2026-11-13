@@ -161,4 +161,21 @@ class ShoppingCartTest {
             .isThrownBy(() -> new ShoppingCart(null))
             .withMessageContaining("products");
     }
+
+    @Test
+    void givenDuplicateProductIds_whenCreateCart_thenThrowsIllegalArgumentException() {
+        assertThatIllegalArgumentException()
+            .isThrownBy(() -> new ShoppingCart(Set.of(
+                new Product("prod_1", "Смартфон", 500.0, 5),
+                new Product("prod_1", "Планшет", 300.0, 2))))
+            .withMessage("Дублирующийся id товара: prod_1");
+    }
+
+
+    @Test
+    void givenNullProducts_whenCreateCart_thenThrowsNullPointerException() {
+        assertThatNullPointerException()
+            .isThrownBy(() -> new ShoppingCart(null))
+            .withMessageContaining("products");
+    }
 }
