@@ -171,7 +171,6 @@ class ShoppingCartTest {
             .withMessage("Дублирующийся id товара: prod_1");
     }
 
-
     @Test
     void givenNullProducts_whenCreateCart_thenThrowsNullPointerException() {
         assertThatNullPointerException()
