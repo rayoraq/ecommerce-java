@@ -6,10 +6,10 @@ import lombok.experimental.FieldDefaults;
 import lombok.experimental.NonFinal;
 import lombok.val;
 
-import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import static java.util.Optional.ofNullable;
@@ -24,7 +24,7 @@ public class ShoppingCart {
     @NonFinal
     int discountPercent;
 
-    public ShoppingCart(@NonNull final Collection<Product> products) {
+    public ShoppingCart(@NonNull final Set<Product> products) {
         catalog = products.stream()
             .collect(Collectors.toMap(Product::id, identity()));
     }

@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
-import java.util.List;
+import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
@@ -18,7 +18,7 @@ class ShoppingCartTest {
 
     @BeforeEach
     void setUp() {
-        cart = new ShoppingCart(List.of(
+        cart = new ShoppingCart(Set.of(
             new Product("prod_1", "Смартфон", 500.0, 5),
             new Product("prod_2", "Чехол", 10.5, 100)));
     }

@@ -7,7 +7,7 @@ import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.NullAndEmptySource;
 import org.junit.jupiter.params.provider.ValueSource;
 
-import java.util.List;
+import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.within;
@@ -17,7 +17,7 @@ class ShoppingCartPromoTest {
 
     @BeforeEach
     void setUp() {
-        cart = new ShoppingCart(List.of(new Product("prod_1", "Смартфон", 500.0, 5)));
+        cart = new ShoppingCart(Set.of(new Product("prod_1", "Смартфон", 500.0, 5)));
         cart.addItem("prod_1", 2);
     }
 
