@@ -63,8 +63,11 @@ public class ShoppingCart {
 
     public boolean applyPromoCode(@NonNull final String text) {
         val promoCode = PromoCode.findByText(text);
-        promoCode.ifPresent(code -> discountPercent = code.getDiscountPercent());
-        return promoCode.isPresent();
+        if (promoCode == null) {
+            return false;
+        }
+        discountPercent = promoCode.getDiscountPercent();
+        return true;
     }
 
     public double getTotal() {
