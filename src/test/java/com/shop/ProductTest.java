@@ -57,7 +57,7 @@ class ProductTest {
     void givenNegativePrice_whenCreateProduct_thenThrowsIllegalArgumentException(final double badPrice) {
         assertThatIllegalArgumentException()
             .isThrownBy(() -> new Product("p", "N", badPrice, 1))
-            .withMessage("price не может быть отрицательной");
+            .withMessageStartingWith("price должна быть конечной и неотрицательной");
     }
 
     @ParameterizedTest
@@ -65,6 +65,13 @@ class ProductTest {
     void givenNegativeStock_whenCreateProduct_thenThrowsIllegalArgumentException(final int badStock) {
         assertThatIllegalArgumentException()
             .isThrownBy(() -> new Product("p", "N", 1, badStock))
-            .withMessage("stock не может быть отрицательным");
+            .withMessageStartingWith("stock не может быть отрицательным");
+    }
+
+    @Test
+    void givenZeroPriceAndStock_whenCreateProduct_thenProductIsCreated() {
+        assertThat(new Product("p", "N", 0, 0))
+            .extracting(Product::price, Product::stock)
+            .containsExactly(0.0, 0);
     }
 }
