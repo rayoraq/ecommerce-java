@@ -10,6 +10,7 @@ import java.util.Set;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
+import static org.assertj.core.api.Assertions.assertThatNullPointerException;
 import static org.assertj.core.api.Assertions.within;
 import static org.assertj.core.api.AssertionsForClassTypes.entry;
 
@@ -124,5 +125,40 @@ class ShoppingCartTest {
         cart.addItem("prod_1", 1);
         assertThatExceptionOfType(UnsupportedOperationException.class)
             .isThrownBy(() -> cart.getItems().put("prod_1", 99));
+    }
+
+    @Test
+    void givenNullProductId_whenAddItem_thenThrowsNullPointerException() {
+        assertThatNullPointerException()
+            .isThrownBy(() -> cart.addItem(null, 1))
+            .withMessageContaining("productId");
+    }
+
+    @Test
+    void givenNullPromoText_whenApplyPromo_thenThrowsNullPointerException() {
+        assertThatNullPointerException()
+            .isThrownBy(() -> cart.applyPromoCode(null))
+            .withMessageContaining("text");
+    }
+
+    @Test
+    void givenNullProductId_whenRemoveItem_thenThrowsNullPointerException() {
+        assertThatNullPointerException()
+            .isThrownBy(() -> cart.removeItem(null))
+            .withMessageContaining("productId");
+    }
+
+    @Test
+    void givenNullProductId_whenRemoveItemWithQuantity_thenThrowsNullPointerException() {
+        assertThatNullPointerException()
+            .isThrownBy(() -> cart.removeItem(null, 1))
+            .withMessageContaining("productId");
+    }
+
+    @Test
+    void givenNullProducts_whenConstructorShoppingCart_thenThrowsNullPointerException() {
+        assertThatNullPointerException()
+            .isThrownBy(() -> new ShoppingCart(null))
+            .withMessageContaining("products");
     }
 }

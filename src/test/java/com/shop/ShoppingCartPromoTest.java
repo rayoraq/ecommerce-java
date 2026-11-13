@@ -4,7 +4,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
-import org.junit.jupiter.params.provider.NullAndEmptySource;
+import org.junit.jupiter.params.provider.EmptySource;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import java.util.Set;
@@ -54,9 +54,9 @@ class ShoppingCartPromoTest {
     }
 
     @ParameterizedTest(name = "Невалидный промокод: [{0}]")
-    @NullAndEmptySource
-    @ValueSource(strings = {"WRONG", "SALE99", "HOT100"})
-    void givenInvalidPromo_whenApplyPromo_thenThrowsExceptionAndDiscountRemainsZero(final String badCode) {
+    @EmptySource
+    @ValueSource(strings = {" ", "WRONG", "SALE99", "HOT100"})
+    void givenInvalidPromo_whenApplyPromo_thenReturnsFalseAndDiscountRemainsZero(final String badCode) {
         assertThat(cart.applyPromoCode(badCode)).isFalse();
         assertThat(cart.getDiscountPercent()).isZero();
         assertThat(cart.getTotal()).isCloseTo(1000.0, within(0.001));
