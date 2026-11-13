@@ -1,6 +1,7 @@
 package com.shop;
 
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.NonFinal;
 import lombok.val;
@@ -23,7 +24,7 @@ public class ShoppingCart {
     @NonFinal
     int discountPercent;
 
-    public ShoppingCart(final Collection<Product> products) {
+    public ShoppingCart(@NonNull final Collection<Product> products) {
         catalog = products.stream()
             .collect(Collectors.toMap(Product::id, identity()));
     }
@@ -32,7 +33,7 @@ public class ShoppingCart {
         return Collections.unmodifiableMap(items);
     }
 
-    public boolean addItem(final String productId, final int quantity) {
+    public boolean addItem(@NonNull final String productId, final int quantity) {
         requirePositive(quantity);
         val newQuantity = items.getOrDefault(productId, 0) + quantity;
         if (newQuantity > findProduct(productId).stock()) {
@@ -42,11 +43,11 @@ public class ShoppingCart {
         return true;
     }
 
-    public boolean removeItem(final String productId) {
+    public boolean removeItem(@NonNull final String productId) {
         return items.remove(productId) != null;
     }
 
-    public boolean removeItem(final String productId, final int quantity) {
+    public boolean removeItem(@NonNull final String productId, final int quantity) {
         requirePositive(quantity);
         val current = items.get(productId);
         if (current == null) {
@@ -60,7 +61,7 @@ public class ShoppingCart {
         return true;
     }
 
-    public boolean applyPromoCode(final String text) {
+    public boolean applyPromoCode(@NonNull final String text) {
         val promoCode = PromoCode.findByText(text);
         promoCode.ifPresent(code -> discountPercent = code.getDiscountPercent());
         return promoCode.isPresent();

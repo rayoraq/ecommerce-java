@@ -1,6 +1,7 @@
 package com.shop;
 
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
@@ -18,7 +19,7 @@ public enum PromoCode {
 
     int discountPercent;
 
-    public static Optional<PromoCode> findByText(final String text) {
+    public static Optional<PromoCode> findByText(@NonNull final String text) {
         return Optional.ofNullable(text)
             .map(String::trim)
             .map(String::toUpperCase)
