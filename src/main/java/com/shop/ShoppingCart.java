@@ -1,18 +1,20 @@
 package com.shop;
 
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.NonFinal;
 import lombok.val;
 
-import java.util.Collection;
-import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.stream.Collectors;
+import java.util.Set;
 
+import static com.shop.PromoCode.findByText;
+import static java.util.Collections.unmodifiableMap;
 import static java.util.Optional.ofNullable;
 import static java.util.function.Function.identity;
+import static java.util.stream.Collectors.toUnmodifiableMap;
 
 @FieldDefaults(makeFinal = true)
 public class ShoppingCart {
@@ -23,16 +25,20 @@ public class ShoppingCart {
     @NonFinal
     int discountPercent;
 
-    public ShoppingCart(final Collection<Product> products) {
+    public ShoppingCart(@NonNull final Set<Product> products) {
         catalog = products.stream()
-            .collect(Collectors.toMap(Product::id, identity()));
+            .collect(toUnmodifiableMap(Product::id, identity(), ShoppingCart::rejectDuplicate));
+    }
+
+    private static Product rejectDuplicate(final Product first, final Product second) {
+        throw new IllegalArgumentException("Дублирующийся id товара: %s".formatted(first.id()));
     }
 
     public Map<String, Integer> getItems() {
-        return Collections.unmodifiableMap(items);
+        return unmodifiableMap(items);
     }
 
-    public boolean addItem(final String productId, final int quantity) {
+    public boolean addItem(@NonNull final String productId, final int quantity) {
         requirePositive(quantity);
         val newQuantity = items.getOrDefault(productId, 0) + quantity;
         if (newQuantity > findProduct(productId).stock()) {
@@ -42,11 +48,11 @@ public class ShoppingCart {
         return true;
     }
 
-    public boolean removeItem(final String productId) {
+    public boolean removeItem(@NonNull final String productId) {
         return items.remove(productId) != null;
     }
 
-    public boolean removeItem(final String productId, final int quantity) {
+    public boolean removeItem(@NonNull final String productId, final int quantity) {
         requirePositive(quantity);
         val current = items.get(productId);
         if (current == null) {
@@ -60,10 +66,13 @@ public class ShoppingCart {
         return true;
     }
 
-    public boolean applyPromoCode(final String text) {
-        val promoCode = PromoCode.findByText(text);
-        promoCode.ifPresent(code -> discountPercent = code.getDiscountPercent());
-        return promoCode.isPresent();
+    public boolean applyPromoCode(@NonNull final String text) {
+        val promoCode = findByText(text);
+        if (promoCode == null) {
+            return false;
+        }
+        discountPercent = promoCode.getDiscountPercent();
+        return true;
     }
 
     public double getTotal() {

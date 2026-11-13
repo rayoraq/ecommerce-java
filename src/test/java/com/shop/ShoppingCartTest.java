@@ -5,11 +5,12 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
-import java.util.List;
+import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
+import static org.assertj.core.api.Assertions.assertThatNullPointerException;
 import static org.assertj.core.api.Assertions.within;
 import static org.assertj.core.api.AssertionsForClassTypes.entry;
 
@@ -18,7 +19,7 @@ class ShoppingCartTest {
 
     @BeforeEach
     void setUp() {
-        cart = new ShoppingCart(List.of(
+        cart = new ShoppingCart(Set.of(
             new Product("prod_1", "Смартфон", 500.0, 5),
             new Product("prod_2", "Чехол", 10.5, 100)));
     }
@@ -124,5 +125,57 @@ class ShoppingCartTest {
         cart.addItem("prod_1", 1);
         assertThatExceptionOfType(UnsupportedOperationException.class)
             .isThrownBy(() -> cart.getItems().put("prod_1", 99));
+    }
+
+    @Test
+    void givenNullProductId_whenAddItem_thenThrowsNullPointerException() {
+        assertThatNullPointerException()
+            .isThrownBy(() -> cart.addItem(null, 1))
+            .withMessageContaining("productId");
+    }
+
+    @Test
+    void givenNullPromoText_whenApplyPromo_thenThrowsNullPointerException() {
+        assertThatNullPointerException()
+            .isThrownBy(() -> cart.applyPromoCode(null))
+            .withMessageContaining("text");
+    }
+
+    @Test
+    void givenNullProductId_whenRemoveItem_thenThrowsNullPointerException() {
+        assertThatNullPointerException()
+            .isThrownBy(() -> cart.removeItem(null))
+            .withMessageContaining("productId");
+    }
+
+    @Test
+    void givenNullProductId_whenRemoveItemWithQuantity_thenThrowsNullPointerException() {
+        assertThatNullPointerException()
+            .isThrownBy(() -> cart.removeItem(null, 1))
+            .withMessageContaining("productId");
+    }
+
+    @Test
+    void givenNullProducts_whenConstructorShoppingCart_thenThrowsNullPointerException() {
+        assertThatNullPointerException()
+            .isThrownBy(() -> new ShoppingCart(null))
+            .withMessageContaining("products");
+    }
+
+    @Test
+    void givenDuplicateProductIds_whenCreateCart_thenThrowsIllegalArgumentException() {
+        assertThatIllegalArgumentException()
+            .isThrownBy(() -> new ShoppingCart(Set.of(
+                new Product("prod_1", "Смартфон", 500.0, 5),
+                new Product("prod_1", "Планшет", 300.0, 2))))
+            .withMessage("Дублирующийся id товара: prod_1");
+    }
+
+
+    @Test
+    void givenNullProducts_whenCreateCart_thenThrowsNullPointerException() {
+        assertThatNullPointerException()
+            .isThrownBy(() -> new ShoppingCart(null))
+            .withMessageContaining("products");
     }
 }

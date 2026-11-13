@@ -4,10 +4,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
-import org.junit.jupiter.params.provider.NullAndEmptySource;
+import org.junit.jupiter.params.provider.EmptySource;
 import org.junit.jupiter.params.provider.ValueSource;
 
-import java.util.List;
+import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.within;
@@ -17,7 +17,7 @@ class ShoppingCartPromoTest {
 
     @BeforeEach
     void setUp() {
-        cart = new ShoppingCart(List.of(new Product("prod_1", "Смартфон", 500.0, 5)));
+        cart = new ShoppingCart(Set.of(new Product("prod_1", "Смартфон", 500.0, 5)));
         cart.addItem("prod_1", 2);
     }
 
@@ -54,9 +54,9 @@ class ShoppingCartPromoTest {
     }
 
     @ParameterizedTest(name = "Невалидный промокод: [{0}]")
-    @NullAndEmptySource
-    @ValueSource(strings = {"WRONG", "SALE99", "HOT100"})
-    void givenInvalidPromo_whenApplyPromo_thenThrowsExceptionAndDiscountRemainsZero(final String badCode) {
+    @EmptySource
+    @ValueSource(strings = {" ", "WRONG", "SALE99", "HOT100"})
+    void givenInvalidPromo_whenApplyPromo_thenReturnsFalseAndDiscountRemainsZero(final String badCode) {
         assertThat(cart.applyPromoCode(badCode)).isFalse();
         assertThat(cart.getDiscountPercent()).isZero();
         assertThat(cart.getTotal()).isCloseTo(1000.0, within(0.001));
