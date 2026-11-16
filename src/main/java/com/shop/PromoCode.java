@@ -26,8 +26,8 @@ public enum PromoCode {
 
     int discountPercent;
 
-    @Nullable
-    public static PromoCode findByText(@NonNull final String text) {
+
+    public static @Nullable PromoCode enumByNames(@NonNull final String text) {
         return NAME.get(text.trim().toUpperCase());
     }
 }
