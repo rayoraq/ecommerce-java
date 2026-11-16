@@ -22,8 +22,7 @@ public class ShoppingCart {
     Map<String, Integer> items = new LinkedHashMap<>();
 
     @Getter
-    @NonFinal
-    int discountPercent;
+    @NonFinal int discountPercent;
 
     public ShoppingCart(@NonNull final Set<Product> products) {
         catalog = products.stream()
