@@ -10,7 +10,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 
-import static com.shop.PromoCode.findByText;
+import static com.shop.PromoCode.enumByNames;
 import static java.util.Collections.unmodifiableMap;
 import static java.util.Optional.ofNullable;
 import static java.util.function.Function.identity;
@@ -18,12 +18,11 @@ import static java.util.stream.Collectors.toUnmodifiableMap;
 
 @FieldDefaults(makeFinal = true)
 public class ShoppingCart {
-    Map<String, Product> catalog;
-    Map<String, Integer> items = new LinkedHashMap<>();
+    @NonNull Map<String, Product> catalog;
+    @NonNull Map<String, Integer> items = new LinkedHashMap<>();
 
     @Getter
-    @NonFinal
-    int discountPercent;
+    @NonFinal int discountPercent;
 
     public ShoppingCart(@NonNull final Set<Product> products) {
         catalog = products.stream()
@@ -67,7 +66,7 @@ public class ShoppingCart {
     }
 
     public boolean applyPromoCode(@NonNull final String text) {
-        val promoCode = findByText(text);
+        val promoCode = enumByNames(text);
         if (promoCode == null) {
             return false;
         }
