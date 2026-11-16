@@ -18,8 +18,8 @@ import static java.util.stream.Collectors.toUnmodifiableMap;
 
 @FieldDefaults(makeFinal = true)
 public class ShoppingCart {
-    Map<String, Product> catalog;
-    Map<String, Integer> items = new LinkedHashMap<>();
+    @NonNull Map<String, Product> catalog;
+    @NonNull Map<String, Integer> items = new LinkedHashMap<>();
 
     @Getter
     @NonFinal int discountPercent;
