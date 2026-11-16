@@ -3,7 +3,12 @@ package com.shop;
 import lombok.NonNull;
 import org.apache.commons.lang3.StringUtils;
 
-public record Product(@NonNull String id, @NonNull String name, double price, int stock) {
+public record Product(
+    @NonNull String id,
+    @NonNull String name,
+    double price,
+    int stock
+) {
 
     public Product {
         requireNotBlank(id, "id");
