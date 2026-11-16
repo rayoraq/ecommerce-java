@@ -10,7 +10,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 
-import static com.shop.PromoCode.findByText;
+import static com.shop.PromoCode.enumByNames;
 import static java.util.Collections.unmodifiableMap;
 import static java.util.Optional.ofNullable;
 import static java.util.function.Function.identity;
@@ -67,7 +67,7 @@ public class ShoppingCart {
     }
 
     public boolean applyPromoCode(@NonNull final String text) {
-        val promoCode = findByText(text);
+        val promoCode = enumByNames(text);
         if (promoCode == null) {
             return false;
         }
