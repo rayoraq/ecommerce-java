@@ -1,29 +1,24 @@
 package com.shop;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.PositiveOrZero;
+import lombok.Builder;
 import lombok.NonNull;
-import org.apache.commons.lang3.StringUtils;
 
+@Builder
 public record Product(
-    @NonNull String id,
-    @NonNull String name,
+    @NonNull
+    @NotBlank(message = "id не может быть пустым")
+    String id,
+
+    @NonNull
+    @NotBlank(message = "name не может быть пустым")
+    String name,
+
+    @PositiveOrZero(message = "price не может быть отрицательной: ${validatedValue}")
     double price,
+
+    @PositiveOrZero(message = "stock не может быть отрицательной: ${validatedValue}")
     int stock
 ) {
-
-    public Product {
-        requireNotBlank(id, "id");
-        requireNotBlank(name, "name");
-        if (!Double.isFinite(price) || price < 0) {
-            throw new IllegalArgumentException("price должна быть конечной и неотрицательной: %s".formatted(price));
-        }
-        if (stock < 0) {
-            throw new IllegalArgumentException("stock не может быть отрицательным: %s".formatted(stock));
-        }
-    }
-
-    private static void requireNotBlank(final String value, final String field) {
-        if (StringUtils.isBlank(value)) {
-            throw new IllegalArgumentException("%s должен быть непустым".formatted(field));
-        }
-    }
 }
