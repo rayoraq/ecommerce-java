@@ -1,5 +1,6 @@
 package com.shop;
 
+import jakarta.validation.constraints.AssertTrue;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.PositiveOrZero;
 import lombok.Builder;
@@ -21,4 +22,9 @@ public record Product(
     @PositiveOrZero(message = "stock не может быть отрицательной: ${validatedValue}")
     int stock
 ) {
+
+    @AssertTrue(message = "price должна быть конечной")
+    public boolean isPriceFinite() {
+        return Double.isFinite(price);
+    }
 }
