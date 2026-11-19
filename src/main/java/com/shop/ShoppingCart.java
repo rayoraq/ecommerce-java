@@ -26,10 +26,15 @@ public class ShoppingCart {
 
     public ShoppingCart(@NonNull final Set<Product> products) {
         catalog = products.stream()
+            .map(BeanValidator::validated)
             .collect(toUnmodifiableMap(Product::id, identity(), ShoppingCart::rejectDuplicate));
     }
 
-    private static Product rejectDuplicate(final Product first, final Product second) {
+    private static Product rejectDuplicate(
+        final Product first,
+        final Product second
+    ) {
+
         throw new IllegalArgumentException("Дублирующийся id товара: %s".formatted(first.id()));
     }
 
@@ -37,7 +42,11 @@ public class ShoppingCart {
         return unmodifiableMap(items);
     }
 
-    public boolean addItem(@NonNull final String productId, final int quantity) {
+    public boolean addItem(
+        @NonNull final String productId,
+        final int quantity
+    ) {
+
         requirePositive(quantity);
         val newQuantity = items.getOrDefault(productId, 0) + quantity;
         if (newQuantity > findProduct(productId).stock()) {
@@ -51,7 +60,11 @@ public class ShoppingCart {
         return items.remove(productId) != null;
     }
 
-    public boolean removeItem(@NonNull final String productId, final int quantity) {
+    public boolean removeItem(
+        @NonNull final String productId,
+        final int quantity
+    ) {
+
         requirePositive(quantity);
         val current = items.get(productId);
         if (current == null) {
