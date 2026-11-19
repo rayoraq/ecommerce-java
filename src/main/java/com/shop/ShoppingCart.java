@@ -30,14 +30,6 @@ public class ShoppingCart {
             .collect(toUnmodifiableMap(Product::id, identity(), ShoppingCart::rejectDuplicate));
     }
 
-    private static Product rejectDuplicate(
-        final Product first,
-        final Product second
-    ) {
-
-        throw new IllegalArgumentException("Дублирующийся id товара: %s".formatted(first.id()));
-    }
-
     public Map<String, Integer> getItems() {
         return unmodifiableMap(items);
     }
@@ -93,6 +85,14 @@ public class ShoppingCart {
             .mapToDouble(entry -> catalog.get(entry.getKey()).price() * entry.getValue())
             .sum();
         return Math.round(sum * (100 - discountPercent)) / 100.0;
+    }
+
+    private static Product rejectDuplicate(
+        final Product first,
+        final Product second
+    ) {
+
+        throw new IllegalArgumentException("Дублирующийся id товара: %s".formatted(first.id()));
     }
 
     private static void requirePositive(final int quantity) {
