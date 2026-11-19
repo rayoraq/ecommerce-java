@@ -10,11 +10,11 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 
-import static com.shop.PromoCode.enumByNames;
 import static java.util.Collections.unmodifiableMap;
 import static java.util.Optional.ofNullable;
 import static java.util.function.Function.identity;
 import static java.util.stream.Collectors.toUnmodifiableMap;
+import static org.apache.commons.lang3.EnumUtils.getEnumIgnoreCase;
 
 @FieldDefaults(makeFinal = true)
 public class ShoppingCart {
@@ -71,7 +71,7 @@ public class ShoppingCart {
     }
 
     public boolean applyPromoCode(@NonNull final String text) {
-        val promoCode = enumByNames(text);
+        val promoCode = getEnumIgnoreCase(PromoCode.class, text);
         if (promoCode == null) {
             return false;
         }
