@@ -1,28 +1,19 @@
 package com.shop;
 
-import jakarta.validation.ConstraintViolation;
-import jakarta.validation.Validation;
-import jakarta.validation.Validator;
-import jakarta.validation.ValidatorFactory;
+import jakarta.validation.ConstraintViolationException;
 import lombok.val;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EmptySource;
 import org.junit.jupiter.params.provider.ValueSource;
 
+import static com.shop.BeanValidator.validated;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatCode;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.assertj.core.api.Assertions.assertThatNullPointerException;
 
 class ProductTest {
-
-    private static Validator validator;
-
-    @BeforeAll
-    static void setUpValidator() {
-        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
-        validator = factory.getValidator();
-    }
 
     private static Product.ProductBuilder validProduct() {
         return Product.builder()
@@ -34,7 +25,7 @@ class ProductTest {
 
     @Test
     void givenValidData_whenCreateProduct_thenAttributesAreSet() {
-        val product = validProduct()
+        val product = Product.builder()
             .id("prod_102")
             .name("Смартфон")
             .price(999.99)
@@ -44,7 +35,9 @@ class ProductTest {
         assertThat(product)
             .extracting(Product::id, Product::name, Product::price, Product::stock)
             .containsExactly("prod_102", "Смартфон", 999.99, 3);
-        assertThat(validator.validate(product)).isEmpty();
+
+        assertThatCode(() -> validated(product))
+            .doesNotThrowAnyException();
     }
 
     @Test
@@ -62,9 +55,9 @@ class ProductTest {
             .id(badId)
             .build();
 
-        assertThat(validator.validate(product))
-            .extracting(ConstraintViolation::getMessage)
-            .containsExactly("id не может быть пустым");
+        assertThatExceptionOfType(ConstraintViolationException.class)
+            .isThrownBy(() -> validated(product))
+            .withMessageContaining("id не может быть пустым");
     }
 
     @Test
@@ -82,9 +75,9 @@ class ProductTest {
             .name(badName)
             .build();
 
-        assertThat(validator.validate(product))
-            .extracting(ConstraintViolation::getMessage)
-            .containsExactly("name не может быть пустым");
+        assertThatExceptionOfType(ConstraintViolationException.class)
+            .isThrownBy(() -> validated(product))
+            .withMessageContaining("name не может быть пустым");
     }
 
     @ParameterizedTest
@@ -94,10 +87,9 @@ class ProductTest {
             .price(badPrice)
             .build();
 
-        assertThat(validator.validate(product))
-            .extracting(ConstraintViolation::getMessage)
-            .anySatisfy(msg -> assertThat(msg)
-                .startsWith("price не может быть отрицательной"));
+        assertThatExceptionOfType(ConstraintViolationException.class)
+            .isThrownBy(() -> validated(product))
+            .withMessageContaining("price не может быть отрицательной");
     }
 
     @ParameterizedTest
@@ -107,10 +99,9 @@ class ProductTest {
             .stock(badStock)
             .build();
 
-        assertThat(validator.validate(product))
-            .extracting(ConstraintViolation::getMessage)
-            .anySatisfy(msg -> assertThat(msg)
-                .startsWith("stock не может быть отрицательной"));
+        assertThatExceptionOfType(ConstraintViolationException.class)
+            .isThrownBy(() -> validated(product))
+            .withMessageContaining("stock не может быть отрицательной");
     }
 
     @Test
@@ -123,7 +114,9 @@ class ProductTest {
         assertThat(product)
             .extracting(Product::price, Product::stock)
             .containsExactly(0.0, 0);
-        assertThat(validator.validate(product)).isEmpty();
+
+        assertThatCode(() -> validated(product))
+            .doesNotThrowAnyException();
     }
 
     @ParameterizedTest
@@ -133,8 +126,8 @@ class ProductTest {
             .price(nonFinitePrice)
             .build();
 
-        assertThat(validator.validate(product))
-            .extracting(ConstraintViolation::getMessage)
-            .contains("price должна быть конечной");
+        assertThatExceptionOfType(ConstraintViolationException.class)
+            .isThrownBy(() -> validated(product))
+            .withMessageContaining("price должна быть конечной");
     }
 }
