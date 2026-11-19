@@ -1,6 +1,5 @@
 package com.shop;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -15,14 +14,23 @@ import static org.assertj.core.api.Assertions.within;
 import static org.assertj.core.api.AssertionsForClassTypes.entry;
 
 class ShoppingCartTest {
-    private ShoppingCart cart;
 
-    @BeforeEach
-    void setUp() {
-        cart = new ShoppingCart(Set.of(
-            new Product("prod_1", "Смартфон", 500.0, 5),
-            new Product("prod_2", "Чехол", 10.5, 100)));
-    }
+    final ShoppingCart cart = new ShoppingCart(Set.of(
+        Product.builder()
+            .id("prod_1")
+            .name("Смартфон")
+            .price(500.0)
+            .stock(5)
+            .build(),
+
+        Product.builder()
+            .id("prod_2")
+            .name("Чехол")
+            .price(10.5)
+            .stock(100)
+            .build()
+    ));
+
 
     @Test
     void givenNewCart_thenItemsAreEmptyAndDiscountIsZero() {
@@ -166,8 +174,20 @@ class ShoppingCartTest {
     void givenDuplicateProductIds_whenCreateCart_thenThrowsIllegalArgumentException() {
         assertThatIllegalArgumentException()
             .isThrownBy(() -> new ShoppingCart(Set.of(
-                new Product("prod_1", "Смартфон", 500.0, 5),
-                new Product("prod_1", "Планшет", 300.0, 2))))
+                Product.builder()
+                    .id("prod_1")
+                    .name("Смартфон")
+                    .price(500.0)
+                    .stock(5)
+                    .build(),
+
+                Product.builder()
+                    .id("prod_1")
+                    .name("Планшет")
+                    .price(300.0)
+                    .stock(2)
+                    .build()
+            )))
             .withMessage("Дублирующийся id товара: prod_1");
     }
 
