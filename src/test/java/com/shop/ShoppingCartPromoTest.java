@@ -1,5 +1,6 @@
 package com.shop;
 
+import lombok.NonNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -45,7 +46,7 @@ class ShoppingCartPromoTest {
         }
     )
     void givenValidPromo_whenApplyPromo_thenAppliesCorrectDiscount(
-        String code,
+        @NonNull final String code,
         int expectedDiscount,
         double expectedTotal
     ) {

@@ -1,10 +1,13 @@
 package com.shop;
 
+import jakarta.annotation.Nullable;
 import jakarta.validation.ConstraintViolationException;
+import lombok.NonNull;
 import lombok.val;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EmptySource;
+import org.junit.jupiter.params.provider.NullSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import static com.shop.BeanValidator.validated;
@@ -55,10 +58,11 @@ class ProductTest {
             .doesNotThrowAnyException();
     }
 
-    @Test
-    void givenNullId_whenCreateProduct_thenThrowsNullPointerException() {
+    @ParameterizedTest
+    @NullSource
+    void givenNullId_whenCreateProduct_thenThrowsNullPointerException(@Nullable final String nullId) {
         assertThatNullPointerException()
-            .isThrownBy(() -> validProduct().id(null)
+            .isThrownBy(() -> validProduct().id(nullId)
                 .build())
             .withMessage("id is marked non-null but is null");
     }
@@ -66,7 +70,7 @@ class ProductTest {
     @ParameterizedTest
     @EmptySource
     @ValueSource(strings = {"   ", "\t", "\n"})
-    void givenInvalidId_whenCreateProduct_thenThrowsIllegalArgumentException(final String badId) {
+    void givenInvalidId_whenCreateProduct_thenThrowsIllegalArgumentException(@NonNull final String badId) {
         val product = validProduct()
             .id(badId)
             .build();
@@ -76,10 +80,11 @@ class ProductTest {
             .withMessageContaining("id не может быть пустым");
     }
 
-    @Test
-    void givenNullName_whenCreateProduct_thenThrowsNullPointerException() {
+    @ParameterizedTest
+    @NullSource
+    void givenNullName_whenCreateProduct_thenThrowsNullPointerException(@Nullable final String nullName) {
         assertThatNullPointerException()
-            .isThrownBy(() -> validProduct().name(null)
+            .isThrownBy(() -> validProduct().name(nullName)
                 .build())
             .withMessage("name is marked non-null but is null");
     }
@@ -87,7 +92,7 @@ class ProductTest {
     @ParameterizedTest
     @EmptySource
     @ValueSource(strings = {"   ", "\t", "\n"})
-    void givenInvalidName_whenCreateProduct_thenThrowsIllegalArgumentException(final String badName) {
+    void givenInvalidName_whenCreateProduct_thenThrowsIllegalArgumentException(@NonNull final String badName) {
         val product = validProduct()
             .name(badName)
             .build();

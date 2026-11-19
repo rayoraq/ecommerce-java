@@ -1,7 +1,9 @@
 package com.shop;
 
+import jakarta.annotation.Nullable;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.NullSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import java.util.Set;
@@ -162,38 +164,43 @@ class ShoppingCartTest {
             .isThrownBy(() -> cart.getItems().put("prod_1", 99));
     }
 
-    @Test
-    void givenNullProductId_whenAddItem_thenThrowsNullPointerException() {
+    @ParameterizedTest
+    @NullSource
+    void givenNullProductId_whenAddItem_thenThrowsNullPointerException(@Nullable final String nullId) {
         assertThatNullPointerException()
-            .isThrownBy(() -> cart.addItem(null, 1))
+            .isThrownBy(() -> cart.addItem(nullId, 1))
             .withMessageContaining("productId");
     }
 
-    @Test
-    void givenNullPromoText_whenApplyPromo_thenThrowsNullPointerException() {
+    @ParameterizedTest
+    @NullSource
+    void givenNullPromoText_whenApplyPromo_thenThrowsNullPointerException(@Nullable final String nullText) {
         assertThatNullPointerException()
-            .isThrownBy(() -> cart.applyPromoCode(null))
+            .isThrownBy(() -> cart.applyPromoCode(nullText))
             .withMessageContaining("text");
     }
 
-    @Test
-    void givenNullProductId_whenRemoveItem_thenThrowsNullPointerException() {
+    @ParameterizedTest
+    @NullSource
+    void givenNullProductId_whenRemoveItem_thenThrowsNullPointerException(@Nullable final String nullId) {
         assertThatNullPointerException()
-            .isThrownBy(() -> cart.removeItem(null))
+            .isThrownBy(() -> cart.removeItem(nullId))
             .withMessageContaining("productId");
     }
 
-    @Test
-    void givenNullProductId_whenRemoveItemWithQuantity_thenThrowsNullPointerException() {
+    @ParameterizedTest
+    @NullSource
+    void givenNullProductId_whenRemoveItemWithQuantity_thenThrowsNullPointerException(@Nullable final String nullId) {
         assertThatNullPointerException()
-            .isThrownBy(() -> cart.removeItem(null, 1))
+            .isThrownBy(() -> cart.removeItem(nullId, 1))
             .withMessageContaining("productId");
     }
 
-    @Test
-    void givenNullProducts_whenConstructorShoppingCart_thenThrowsNullPointerException() {
+    @ParameterizedTest
+    @NullSource
+    void givenNullProducts_whenConstructorShoppingCart_thenThrowsNullPointerException(@Nullable final Set<Product> nullProducts) {
         assertThatNullPointerException()
-            .isThrownBy(() -> new ShoppingCart(null))
+            .isThrownBy(() -> new ShoppingCart(nullProducts))
             .withMessageContaining("products");
     }
 
@@ -216,12 +223,5 @@ class ShoppingCartTest {
                     .build()
             )))
             .withMessage("Дублирующийся id товара: prod_1");
-    }
-
-    @Test
-    void givenNullProducts_whenCreateCart_thenThrowsNullPointerException() {
-        assertThatNullPointerException()
-            .isThrownBy(() -> new ShoppingCart(null))
-            .withMessageContaining("products");
     }
 }
