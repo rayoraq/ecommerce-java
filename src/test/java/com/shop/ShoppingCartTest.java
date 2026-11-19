@@ -6,14 +6,15 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
+import java.util.Map;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
 import static org.assertj.core.api.Assertions.assertThatNullPointerException;
+import static org.assertj.core.api.Assertions.entry;
 import static org.assertj.core.api.Assertions.within;
-import static org.assertj.core.api.AssertionsForClassTypes.entry;
 
 class ShoppingCartTest {
 
@@ -55,7 +56,8 @@ class ShoppingCartTest {
         cart.addItem("prod_1", 3);
 
         assertThat(cart.getItems())
-            .containsEntry("prod_1", 5);
+            .usingRecursiveComparison()
+            .isEqualTo(Map.of("prod_1", 5));
     }
 
     @ParameterizedTest
@@ -87,7 +89,8 @@ class ShoppingCartTest {
         assertThat(cart.addItem("prod_1", 3))
             .isFalse();
         assertThat(cart.getItems())
-            .containsEntry("prod_1", 3);
+            .usingRecursiveComparison()
+            .isEqualTo(Map.of("prod_1", 3));
     }
 
     @Test
@@ -96,7 +99,8 @@ class ShoppingCartTest {
         cart.removeItem("prod_1", 1);
 
         assertThat(cart.getItems())
-            .containsEntry("prod_1", 3);
+            .usingRecursiveComparison()
+            .isEqualTo(Map.of("prod_1", 3));
     }
 
     @Test
@@ -138,7 +142,8 @@ class ShoppingCartTest {
         assertThatIllegalArgumentException()
             .isThrownBy(() -> cart.removeItem("prod_1", badQuantity));
         assertThat(cart.getItems())
-            .containsEntry("prod_1", 3);
+            .usingRecursiveComparison()
+            .isEqualTo(Map.of("prod_1", 3));
     }
 
     @Test
