@@ -1,16 +1,8 @@
 package com.shop;
 
 import lombok.Getter;
-import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.Arrays;
-import java.util.Map;
-
-import static java.util.function.Function.identity;
-import static java.util.stream.Collectors.toUnmodifiableMap;
 
 @Getter
 @RequiredArgsConstructor
@@ -21,13 +13,5 @@ public enum PromoCode {
     HALF(50),
     HOT(90);
 
-    private static final Map<String, PromoCode> NAME = Arrays.stream(values())
-        .collect(toUnmodifiableMap(PromoCode::name, identity()));
-
     int discountPercent;
-
-
-    public static @Nullable PromoCode enumByNames(@NonNull final String text) {
-        return NAME.get(text.trim().toUpperCase());
-    }
 }
