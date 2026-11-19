@@ -97,12 +97,12 @@ public class ShoppingCart {
 
     private static void requirePositive(final int quantity) {
         if (quantity <= 0) {
-            throw new IllegalArgumentException("Количество должно быть больше 0: " + quantity);
+            throw new IllegalArgumentException("Количество должно быть больше 0: %s".formatted(quantity));
         }
     }
 
     private Product findProduct(final String productId) {
         return ofNullable(catalog.get(productId))
-            .orElseThrow(() -> new IllegalArgumentException("Товар не найден: " + productId));
+            .orElseThrow(() -> new IllegalArgumentException("Товар не найден: %s".formatted(productId)));
     }
 }
