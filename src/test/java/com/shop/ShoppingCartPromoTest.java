@@ -13,11 +13,17 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.within;
 
 class ShoppingCartPromoTest {
-    private ShoppingCart cart;
+
+    final ShoppingCart cart = new ShoppingCart(Set.of(
+        Product.builder()
+            .id("prod_1")
+            .name("Смартфон")
+            .price(500.0)
+            .stock(5)
+            .build()));
 
     @BeforeEach
     void setUp() {
-        cart = new ShoppingCart(Set.of(new Product("prod_1", "Смартфон", 500.0, 5)));
         cart.addItem("prod_1", 2);
     }
 

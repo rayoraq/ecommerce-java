@@ -71,7 +71,7 @@ public class ShoppingCart {
     }
 
     public boolean applyPromoCode(@NonNull final String text) {
-        val promoCode = getEnumIgnoreCase(PromoCode.class, text);
+        val promoCode = getEnumIgnoreCase(PromoCode.class, text.trim());
         if (promoCode == null) {
             return false;
         }
