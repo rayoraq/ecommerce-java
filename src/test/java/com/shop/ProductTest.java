@@ -51,7 +51,6 @@ class ProductTest {
         assertThat(product)
             .extracting(Product::id, Product::name, Product::price, Product::stock)
             .containsExactly("prod_102", "Смартфон", 999.99, 3);
-
         assertThatCode(() -> validated(product))
             .doesNotThrowAnyException();
     }
@@ -59,7 +58,8 @@ class ProductTest {
     @Test
     void givenNullId_whenCreateProduct_thenThrowsNullPointerException() {
         assertThatNullPointerException()
-            .isThrownBy(() -> validProduct().id(null).build())
+            .isThrownBy(() -> validProduct().id(null)
+                .build())
             .withMessage("id is marked non-null but is null");
     }
 
@@ -79,7 +79,8 @@ class ProductTest {
     @Test
     void givenNullName_whenCreateProduct_thenThrowsNullPointerException() {
         assertThatNullPointerException()
-            .isThrownBy(() -> validProduct().name(null).build())
+            .isThrownBy(() -> validProduct().name(null)
+                .build())
             .withMessage("name is marked non-null but is null");
     }
 
@@ -130,7 +131,6 @@ class ProductTest {
         assertThat(product)
             .extracting(Product::price, Product::stock)
             .containsExactly(0.0, 0);
-
         assertThatCode(() -> validated(product))
             .doesNotThrowAnyException();
     }
