@@ -24,6 +24,22 @@ class ProductTest {
     }
 
     @Test
+    void givenValidData_whenCreateByConstructor_thenEqualsProductBuiltByBuilder() {
+        val product = Product.builder()
+            .id("prod_102")
+            .name("Смартфон")
+            .price(999.99)
+            .stock(3)
+            .build();
+
+        val productWithConstructor = validated(new Product("prod_102", "Смартфон", 999.99, 3));
+
+        assertThat(productWithConstructor)
+            .usingRecursiveComparison()
+            .isEqualTo(product);
+    }
+
+    @Test
     void givenValidData_whenCreateProduct_thenAttributesAreSet() {
         val product = Product.builder()
             .id("prod_102")
