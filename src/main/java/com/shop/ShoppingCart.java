@@ -64,9 +64,9 @@ public class ShoppingCart {
         }
         if (quantity >= current) {
             items.remove(productId);
-        } else {
-            items.put(productId, current - quantity);
+            return true;
         }
+        items.put(productId, current - quantity);
         return true;
     }
 
