@@ -1,5 +1,6 @@
-package com.shop;
+package com.shop.ecommerce.service;
 
+import com.shop.ecommerce.beans.Product;
 import jakarta.annotation.Nullable;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;

@@ -1,4 +1,4 @@
-package com.shop;
+package com.shop.ecommerce.enums;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

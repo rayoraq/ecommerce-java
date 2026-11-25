@@ -1,4 +1,4 @@
-package com.shop;
+package com.shop.ecommerce.beans;
 
 import jakarta.validation.constraints.AssertTrue;
 import jakarta.validation.constraints.NotBlank;
