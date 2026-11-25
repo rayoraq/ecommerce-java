@@ -1,4 +1,4 @@
 @NonNullApi
-package com.shop;
+package com.shop.ecommerce.enums;
 
 import org.springframework.lang.NonNullApi;

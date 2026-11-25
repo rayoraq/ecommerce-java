@@ -1,5 +1,8 @@
-package com.shop;
+package com.shop.ecommerce.service;
 
+import com.shop.ecommerce.utils.BeanValidator;
+import com.shop.ecommerce.beans.Product;
+import com.shop.ecommerce.enums.PromoCode;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.experimental.FieldDefaults;

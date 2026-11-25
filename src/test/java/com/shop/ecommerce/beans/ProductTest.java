@@ -1,4 +1,4 @@
-package com.shop;
+package com.shop.ecommerce.beans;
 
 import jakarta.annotation.Nullable;
 import jakarta.validation.ConstraintViolationException;
@@ -10,7 +10,7 @@ import org.junit.jupiter.params.provider.EmptySource;
 import org.junit.jupiter.params.provider.NullSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
-import static com.shop.BeanValidator.validated;
+import static com.shop.ecommerce.utils.BeanValidator.validated;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;

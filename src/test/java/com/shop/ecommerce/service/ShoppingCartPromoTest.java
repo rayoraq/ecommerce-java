@@ -1,5 +1,6 @@
-package com.shop;
+package com.shop.ecommerce.service;
 
+import com.shop.ecommerce.beans.Product;
 import lombok.NonNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
