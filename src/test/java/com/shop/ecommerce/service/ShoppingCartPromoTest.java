@@ -16,7 +16,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.within;
 
 class ShoppingCartPromoTest {
 
-    final ShoppingCart cart = new ShoppingCart(Set.of(
+    final ShoppingCartService cart = new ShoppingCartService(Set.of(
         Product.builder()
             .id("prod_1")
             .name("Смартфон")

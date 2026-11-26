@@ -8,13 +8,12 @@ import lombok.NonNull;
 
 @Builder
 public record Product(
-    @NonNull
-    @NotBlank(message = "id не может быть пустым")
-    String id,
 
-    @NonNull
+    @NotBlank(message = "id не может быть пустым")
+    @NonNull String id,
+
     @NotBlank(message = "name не может быть пустым")
-    String name,
+    @NonNull String name,
 
     @PositiveOrZero(message = "price не может быть отрицательной: ${validatedValue}")
     double price,
@@ -22,7 +21,6 @@ public record Product(
     @PositiveOrZero(message = "stock не может быть отрицательной: ${validatedValue}")
     int stock
 ) {
-
     @AssertTrue(message = "price должна быть конечной")
     public boolean isPriceFinite() {
         return Double.isFinite(price);

@@ -17,9 +17,9 @@ import static org.assertj.core.api.Assertions.assertThatNullPointerException;
 import static org.assertj.core.api.Assertions.entry;
 import static org.assertj.core.api.Assertions.within;
 
-class ShoppingCartTest {
+class ShoppingCartServiceTest {
 
-    final ShoppingCart cart = new ShoppingCart(Set.of(
+    final ShoppingCartService cart = new ShoppingCartService(Set.of(
         Product.builder()
             .id("prod_1")
             .name("Смартфон")
@@ -206,14 +206,14 @@ class ShoppingCartTest {
     @NullSource
     void givenNullProducts_whenConstructorShoppingCart_thenThrowsNullPointerException(@Nullable final Set<Product> nullProducts) {
         assertThatNullPointerException()
-            .isThrownBy(() -> new ShoppingCart(nullProducts))
+            .isThrownBy(() -> new ShoppingCartService(nullProducts))
             .withMessageContaining("products");
     }
 
     @Test
     void givenDuplicateProductIds_whenCreateCart_thenThrowsIllegalArgumentException() {
         assertThatIllegalArgumentException()
-            .isThrownBy(() -> new ShoppingCart(Set.of(
+            .isThrownBy(() -> new ShoppingCartService(Set.of(
                 Product.builder()
                     .id("prod_1")
                     .name("Смартфон")
