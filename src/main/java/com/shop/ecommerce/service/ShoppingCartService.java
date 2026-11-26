@@ -34,6 +34,7 @@ public class ShoppingCartService {
     }
 
     public Map<String, Integer> getItems() {
+
         return unmodifiableMap(items);
     }
 
@@ -92,8 +93,7 @@ public class ShoppingCartService {
     }
 
     public double getTotal() {
-        val sum = items.entrySet()
-            .stream()
+        val sum = items.entrySet().stream()
             .mapToDouble(entry -> catalog.get(entry.getKey()).price() * entry.getValue())
             .sum();
 
