@@ -17,7 +17,7 @@ import static org.assertj.core.api.Assertions.assertThatNullPointerException;
 import static org.assertj.core.api.Assertions.entry;
 import static org.assertj.core.api.Assertions.within;
 
-class ShoppingCartTest {
+class ShoppingCartServiceTest {
 
     final ShoppingCartService cart = new ShoppingCartService(Set.of(
         Product.builder()
