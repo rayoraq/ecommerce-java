@@ -3,12 +3,13 @@ package com.shop.ecommerce.utils;
 import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
-import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.val;
 
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
+import static lombok.AccessLevel.PRIVATE;
+
+@NoArgsConstructor(access = PRIVATE)
 public class BeanValidator {
     private static final Validator VALIDATOR = Validation.buildDefaultValidatorFactory()
         .getValidator();
