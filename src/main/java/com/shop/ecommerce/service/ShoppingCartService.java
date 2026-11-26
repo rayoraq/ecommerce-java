@@ -2,6 +2,7 @@ package com.shop.ecommerce.service;
 
 import com.shop.ecommerce.beans.Product;
 import com.shop.ecommerce.enums.PromoCode;
+import com.shop.ecommerce.utils.ArgumentValidator;
 import com.shop.ecommerce.utils.BeanValidator;
 import lombok.Getter;
 import lombok.NonNull;
@@ -13,6 +14,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 
+import static com.shop.ecommerce.utils.ArgumentValidator.requirePositive;
 import static java.util.Collections.unmodifiableMap;
 import static java.util.Optional.ofNullable;
 import static java.util.function.Function.identity;
@@ -30,7 +32,7 @@ public class ShoppingCartService {
     public ShoppingCartService(@NonNull final Set<Product> products) {
         catalog = products.stream()
             .map(BeanValidator::validate)
-            .collect(toUnmodifiableMap(Product::id, identity(), ShoppingCartService::rejectDuplicate));
+            .collect(toUnmodifiableMap(Product::id, identity(), ArgumentValidator::rejectDuplicate));
     }
 
     public Map<String, Integer> getItems() {
@@ -98,21 +100,6 @@ public class ShoppingCartService {
             .sum();
 
         return Math.round(sum * (100 - discountPercent)) / 100.0;
-    }
-
-    private static Product rejectDuplicate(
-        final Product first,
-        final Product second
-    ) {
-
-        throw new IllegalArgumentException("Дублирующийся id товара: %s".formatted(first.id()));
-    }
-
-    private static void requirePositive(final int quantity) {
-        if (quantity <= 0) {
-
-            throw new IllegalArgumentException("Количество должно быть больше 0: %s".formatted(quantity));
-        }
     }
 
     private Product findProduct(final String productId) {
