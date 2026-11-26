@@ -45,13 +45,16 @@ public class ShoppingCartService {
         requirePositive(quantity);
         val newQuantity = items.getOrDefault(productId, 0) + quantity;
         if (newQuantity > findProduct(productId).stock()) {
+
             return false;
         }
         items.put(productId, newQuantity);
+
         return true;
     }
 
     public boolean removeItem(@NonNull final String productId) {
+
         return items.remove(productId) != null;
     }
 
@@ -63,22 +66,28 @@ public class ShoppingCartService {
         requirePositive(quantity);
         val current = items.get(productId);
         if (current == null) {
+
             return false;
         }
         if (quantity >= current) {
+
             items.remove(productId);
+
             return true;
         }
         items.put(productId, current - quantity);
+
         return true;
     }
 
     public boolean applyPromoCode(@NonNull final String text) {
         val promoCode = getEnumIgnoreCase(PromoCode.class, text.trim());
         if (promoCode == null) {
+
             return false;
         }
         discountPercent = promoCode.getDiscountPercent();
+
         return true;
     }
 
@@ -87,6 +96,7 @@ public class ShoppingCartService {
             .stream()
             .mapToDouble(entry -> catalog.get(entry.getKey()).price() * entry.getValue())
             .sum();
+
         return Math.round(sum * (100 - discountPercent)) / 100.0;
     }
 
@@ -100,11 +110,13 @@ public class ShoppingCartService {
 
     private static void requirePositive(final int quantity) {
         if (quantity <= 0) {
+
             throw new IllegalArgumentException("Количество должно быть больше 0: %s".formatted(quantity));
         }
     }
 
     private Product findProduct(final String productId) {
+
         return ofNullable(catalog.get(productId))
             .orElseThrow(() -> new IllegalArgumentException("Товар не найден: %s".formatted(productId)));
     }
