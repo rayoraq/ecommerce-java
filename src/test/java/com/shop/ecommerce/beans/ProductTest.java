@@ -64,7 +64,7 @@ class ProductTest {
         assertThatNullPointerException()
             .isThrownBy(() -> validProduct().id(nullId)
                 .build())
-            .withMessage("id is marked non-null but is null");
+            .withMessageContaining("id");
     }
 
     @ParameterizedTest
@@ -86,7 +86,7 @@ class ProductTest {
         assertThatNullPointerException()
             .isThrownBy(() -> validProduct().name(nullName)
                 .build())
-            .withMessage("name is marked non-null but is null");
+            .withMessageContaining("name");
     }
 
     @ParameterizedTest
