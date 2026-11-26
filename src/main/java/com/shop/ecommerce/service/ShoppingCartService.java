@@ -20,17 +20,17 @@ import static java.util.stream.Collectors.toUnmodifiableMap;
 import static org.apache.commons.lang3.EnumUtils.getEnumIgnoreCase;
 
 @FieldDefaults(makeFinal = true)
-public class ShoppingCart {
+public class ShoppingCartService {
     @NonNull Map<String, Product> catalog;
     @NonNull Map<String, Integer> items = new LinkedHashMap<>();
 
     @Getter
     @NonFinal int discountPercent;
 
-    public ShoppingCart(@NonNull final Set<Product> products) {
+    public ShoppingCartService(@NonNull final Set<Product> products) {
         catalog = products.stream()
             .map(BeanValidator::validate)
-            .collect(toUnmodifiableMap(Product::id, identity(), ShoppingCart::rejectDuplicate));
+            .collect(toUnmodifiableMap(Product::id, identity(), ShoppingCartService::rejectDuplicate));
     }
 
     public Map<String, Integer> getItems() {
