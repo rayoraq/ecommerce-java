@@ -10,7 +10,7 @@ import org.junit.jupiter.params.provider.EmptySource;
 import org.junit.jupiter.params.provider.NullSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
-import static com.shop.ecommerce.utils.BeanValidator.validated;
+import static com.shop.ecommerce.utils.BeanValidator.validate;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
@@ -35,7 +35,7 @@ class ProductTest {
             .stock(3)
             .build();
 
-        val productWithConstructor = validated(new Product("prod_102", "Смартфон", 999.99, 3));
+        val productWithConstructor = validate(new Product("prod_102", "Смартфон", 999.99, 3));
 
         assertThat(productWithConstructor)
             .usingRecursiveComparison()
@@ -54,7 +54,7 @@ class ProductTest {
         assertThat(product)
             .extracting(Product::id, Product::name, Product::price, Product::stock)
             .containsExactly("prod_102", "Смартфон", 999.99, 3);
-        assertThatCode(() -> validated(product))
+        assertThatCode(() -> validate(product))
             .doesNotThrowAnyException();
     }
 
@@ -76,7 +76,7 @@ class ProductTest {
             .build();
 
         assertThatExceptionOfType(ConstraintViolationException.class)
-            .isThrownBy(() -> validated(product))
+            .isThrownBy(() -> validate(product))
             .withMessageContaining("id не может быть пустым");
     }
 
@@ -98,7 +98,7 @@ class ProductTest {
             .build();
 
         assertThatExceptionOfType(ConstraintViolationException.class)
-            .isThrownBy(() -> validated(product))
+            .isThrownBy(() -> validate(product))
             .withMessageContaining("name не может быть пустым");
     }
 
@@ -110,7 +110,7 @@ class ProductTest {
             .build();
 
         assertThatExceptionOfType(ConstraintViolationException.class)
-            .isThrownBy(() -> validated(product))
+            .isThrownBy(() -> validate(product))
             .withMessageContaining("price не может быть отрицательной");
     }
 
@@ -122,7 +122,7 @@ class ProductTest {
             .build();
 
         assertThatExceptionOfType(ConstraintViolationException.class)
-            .isThrownBy(() -> validated(product))
+            .isThrownBy(() -> validate(product))
             .withMessageContaining("stock не может быть отрицательной");
     }
 
@@ -136,7 +136,7 @@ class ProductTest {
         assertThat(product)
             .extracting(Product::price, Product::stock)
             .containsExactly(0.0, 0);
-        assertThatCode(() -> validated(product))
+        assertThatCode(() -> validate(product))
             .doesNotThrowAnyException();
     }
 
@@ -148,7 +148,7 @@ class ProductTest {
             .build();
 
         assertThatExceptionOfType(ConstraintViolationException.class)
-            .isThrownBy(() -> validated(product))
+            .isThrownBy(() -> validate(product))
             .withMessageContaining("price должна быть конечной");
     }
 }

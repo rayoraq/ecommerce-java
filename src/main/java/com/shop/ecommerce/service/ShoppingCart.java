@@ -1,8 +1,8 @@
 package com.shop.ecommerce.service;
 
-import com.shop.ecommerce.utils.BeanValidator;
 import com.shop.ecommerce.beans.Product;
 import com.shop.ecommerce.enums.PromoCode;
+import com.shop.ecommerce.utils.BeanValidator;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.experimental.FieldDefaults;
@@ -29,7 +29,7 @@ public class ShoppingCart {
 
     public ShoppingCart(@NonNull final Set<Product> products) {
         catalog = products.stream()
-            .map(BeanValidator::validated)
+            .map(BeanValidator::validate)
             .collect(toUnmodifiableMap(Product::id, identity(), ShoppingCart::rejectDuplicate));
     }
 
