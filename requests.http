@@ -1,0 +1,35 @@
+### Посмотреть пустую корзину пользователя user1
+GET http://localhost:8080/carts/user1
+
+### Добавить 2 смартфона в корзину
+POST http://localhost:8080/carts/user1/items
+Content-Type: application/json
+
+{
+    "productId": "prod_1",
+    "quantity": 2
+}
+
+### Добавить 3 чехла в корзину
+POST http://localhost:8080/carts/user1/items
+Content-Type: application/json
+
+{
+    "productId": "prod_2",
+    "quantity": 3
+}
+
+### Применить промокод SALE10 для user1
+POST http://localhost:8080/carts/user1/promo?code=SALE10
+
+### Удалить 1 смартфон из корзины
+DELETE http://localhost:8080/carts/user1/items/prod_1?quantity=1
+
+### Добавить несуществующий товар
+POST http://localhost:8080/carts/user1/items
+Content-Type: application/json
+
+{
+    "productId": "unknown_id",
+    "quantity": 1
+}
